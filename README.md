@@ -10,3 +10,4 @@ Files from IS2 PLC challenge blind test set:
 * [Inpainted with b2b_LPC _full_](https://mega.nz/folder/Sc4STaZS#K9Z2gfswMqkQXlpgzljfqw)
 * [Inpainted with b2b_LPC _lite_](https://mega.nz/folder/SApmULgQ#Z5ZlNTiIIOsESu816VGG0g) (4x less kernels than _full_)
 * [Inpainted with PARCNet (baseline)](https://mega.nz/folder/PZARxYiY#yAbU7ICQefNjazOj31cSeQ)
+* [Test-set trace analysis](https://mega.nz/file/XBx2QAzK#CBx-yiXkmjUYLtwpx8KGVDSutg3e5DZ3KcWARZeR8mc)
