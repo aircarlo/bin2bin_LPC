@@ -1,0 +1,15 @@
+
+TRACE_PATH: '/raid/users/caironi/Is2_PLC_challenge/DATA/blind_test_set/traces/'
+DATA_PATH: '/raid/users/caironi/Is2_PLC_challenge/DATA/blind_test_set/lossy/'
+B2B_CKPT_FILE: '/raid/users/caironi/Is2_PLC_challenge/bin2bin/logs/014/checkpoints/chkpt.pth'
+DEST_PATH: '/raid/users/caironi/Is2_PLC_challenge/DATA/B2B_inpainted/exp014_lite/'
+CONTEXT: 4090      # working context size
+LP_ORD: 128        # LP order
+GAP_SIZE: 512      
+WORK_SR: 44100     
+XF1: 64            # intra-gap cross-fade extension
+XF2: 512           # post gap cross-fade extension
+DEVICE: 'cuda'
+G_FEATURES: 16     # lite = 16, full = 64
+FFT_SIZE: 511
+FFT_HOP: 16
