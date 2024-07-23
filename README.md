@@ -8,4 +8,4 @@ To start generate inpainted files, set the appropriate paths in `fw_config.yaml`
 
 Pretrained Generator checkpoints for both _lite_ and _full_ bin2bin versions are available [here](https://mega.nz/folder/mA4kQYCZ#mTp8urMkT-vlGDtZSwEjpA);
 
-For further help, please contact me at c.aironi@staff.univpm.it
+For further informations, please contact me at c.aironi@staff.univpm.it
