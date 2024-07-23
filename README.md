@@ -6,6 +6,6 @@ To start train the _bin2bin_ network from scratch, set the appropriate dataset p
 
 To start generate inpainted files, set the appropriate paths in `fw_config.yaml`, then run `inpaint_b2b_lpc.py`.
 
-Pretrained Generator checkpoints for both _lite_ and _full_ bin2bin versions are available [here](https://mega.nz/folder/7MJ2TC5C#Bf0ewaRbRy5ouX5pN9KrpA);
+Pretrained Generator checkpoints for both _lite_ and _full_ bin2bin versions are available [here](https://mega.nz/folder/mA4kQYCZ#mTp8urMkT-vlGDtZSwEjpA);
 
 For further help, please contact me at c.aironi@staff.univpm.it
