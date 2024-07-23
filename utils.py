@@ -92,17 +92,5 @@ def get_rate_burst(mask_file):
     return rate, burst
 
 
-# moving average filter
-def m_a(signal, window_size):
-    filtered_signal = []
-    window = []
-    for i in range(len(signal)):
-        window.append(signal[i])
-        if len(window) > window_size:
-            window.pop(0)
-        filtered_signal.append(sum(window) / len(window))
-    
-    return np.array(filtered_signal)
-
 if __name__ == "__main__":
     pass
