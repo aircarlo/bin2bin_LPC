@@ -79,9 +79,9 @@ for w_idx, wav_fname in enumerate(f_list):
             end_s = i+par["CONTEXT"]
             if frame_mask[k] == 0: # if lost
                 # LPC prediction
-                pred_LPC, _ = lpc_model.predict(ctxt=inpainted_waveform_ext[start_s:end_s-par["GAP_SIZE"]], samp=par["GAP_SIZE"]+par["XF2"], flag=not(prev_lost))
+                pred_LPC = lpc_model.predict(ctxt=inpainted_waveform_ext[start_s:end_s-par["GAP_SIZE"]], samp=par["GAP_SIZE"]+par["XF2"], recompute_c=not(prev_lost))
                 # bin2bin refinement
-                t_lossy_frame = np.concatenate((inpainted_waveform_ext[start_s:end_s-(par["GAP_SIZE"]+par["XF2"])], pred_LPC))
+                t_lossy_frame = np.concatenate((inpainted_waveform_ext[start_s:end_s-(par["GAP_SIZE"]+par["XF2"])], 0.8*pred_LPC))
                 S_lossy_frame = spec(torch.from_numpy(t_lossy_frame).unsqueeze(0).float())
                 # abs/pha
                 S_lossy_frame_ABS = torch.abs(S_lossy_frame)**0.5
@@ -97,8 +97,6 @@ for w_idx, wav_fname in enumerate(f_list):
                 S_inp_cplx = ((S_inp*3.5)**2) * torch.exp(1j*S_lossy_frame_PHA)
                 t_inp = np.array(inv_spec(S_inp_cplx.squeeze(1), length=par["CONTEXT"]))
                 pred_b2b = t_inp[0,-(par["GAP_SIZE"]+par["XF2"]):]
-                # LP filter
-                pred_b2b = m_a(t_inp[0,-(par["GAP_SIZE"]+par["XF2"]):], 15) # shape (par["GAP_SIZE"]+par["XF2"],)
                 # xfade intra-gap
                 pred_b2b[0:par["XF1"]] *= xfade1_in
                 pred_b2b[0:par["XF1"]] += pred_LPC[0:par["XF1"]] * xfade1_out

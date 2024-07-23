@@ -46,7 +46,7 @@ class PatchDiscriminator(nn.Module):
         layers.append(
             nn.Conv2d(
                 in_channels, 1, k_size, stride=1, padding=1, padding_mode="reflect"
-            ), # no need to add a sigmoid layer here, since training uses BCEWithLogits loss
+            ),
         )
 
         self.model = nn.Sequential(*layers)

@@ -23,8 +23,8 @@ par["DEVICE"] = "cuda" if torch.cuda.is_available() else "cpu"
 if par["SAVE_IMG_AT"]=='all':
     par["SAVE_IMG_AT"] = list(range(1,par["NUM_EPOCHS"]+1))
 data = sys.argv[1]
-if data not in ['medley_solos', 'good_sounds', 'synth_sounds']:
-    raise Exception('Please specify dataset: medley_solos, good_sounds or synth_sounds')
+if data not in ['medley_solos', 'good_sounds', 'synth_sounds', 'all']:
+    raise Exception('Please specify dataset: medley_solos, good_sounds, synth_sounds or all')
 
 # ISTFT class
 inv_spec = T.InverseSpectrogram(n_fft=par["FFT_SIZE"], hop_length=par["FFT_HOP"]).to(par["DEVICE"])
@@ -63,8 +63,8 @@ def train_fn(disc, gen, loader, opt_disc, opt_gen, loss, lr_schedulers, tb_write
         opt_gen.zero_grad()
         D_fake = disc(x, y_fake)
         G_fake_loss = loss[0](D_fake, torch.ones_like(D_fake))
-        SC_loss = loss[1](y_fake, y) # * par["LAMBDA"]
-        MAG_loss = loss[2](y_fake, y) # * par["LAMBDA"]
+        SC_loss = loss[1](y_fake, y) * par["LAMBDA"]
+        MAG_loss = loss[2](y_fake, y) * par["LAMBDA"]
 
         G_loss = G_fake_loss + SC_loss + MAG_loss
 
@@ -143,7 +143,10 @@ def main(data):
         f_list = file_parse(par["GOOD_SOUNDS_PATH"], ext='wav', return_fullpath=True)
     if data == 'synth_sounds':
         f_list = file_parse(par["SYNTH_SOUNDS_PATH"], substr = 'segmented', ext='wav', return_fullpath=True)
-
+    if data == 'all':
+        f_list = file_parse(par["MEDLEY_SOLOS_PATH"], ext='wav', return_fullpath=True)
+        f_list.extend(file_parse(par["GOOD_SOUNDS_PATH"], ext='wav', return_fullpath=True))
+        f_list.extend(file_parse(par["SYNTH_SOUNDS_PATH"], substr = 'segmented', ext='wav', return_fullpath=True))
     train_dataset = Music_dataset_raw(f_list,
                                       par,
                                       mode='train',
