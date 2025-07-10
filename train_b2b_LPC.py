@@ -57,10 +57,9 @@ def train_fn(disc, gen, loader, opt_disc, opt_gen, loss, lr_schedulers, tb_write
     MAG_loss_epoch = 0.0
     G_loss_epoch = 0.0
 
-    for idx, (x, y, x_pha, _) in enumerate(loop):
+    for idx, (x, y, _, _) in enumerate(loop):
         x = x.to(par["DEVICE"]) # lossy sample
         y = y.to(par["DEVICE"]) # clean sample
-        x_pha = x_pha.to(par["DEVICE"]) # lossy sample (phase)
 
         # Train the discriminator
         opt_disc.zero_grad()
