@@ -10,7 +10,7 @@ import torchaudio.transforms as T
 # parse files with generic extensions
 def file_parse(root_dir, ext='', substr='', return_fullpath=True):
     file_list = []
-    print(f'parse {root_dir}... ', end='')
+    print(f'>> parse {root_dir}... ', end='')
     for root, _, files in os.walk(root_dir, topdown=False):
         for name in files:
             if os.path.isfile(os.path.join(root, name)) and name[-3:] == ext and substr in root:

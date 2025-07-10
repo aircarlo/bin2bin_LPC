@@ -1,19 +1,20 @@
 import os, sys
 import yaml
+import math
 import torch
 import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
-from torch.optim.lr_scheduler import CosineAnnealingLR
+from torch.optim.lr_scheduler import CosineAnnealingLR, LambdaLR
 import torchaudio.transforms as T
 from tqdm import tqdm
 from datetime import datetime
 from loss import *
 from utils import save_checkpoint, save_gen_specs, file_parse
-from music_dataset import Music_dataset_raw
+from music_dataset import TF_dataset
 from discriminator_model import Discriminator
-from generator_model import Generator
+from generator_model import DSCNN_Generator
 
 
 # parse parameters
@@ -32,6 +33,22 @@ inv_spec = T.InverseSpectrogram(n_fft=par["FFT_SIZE"], hop_length=par["FFT_HOP"]
 # step counter (used for logs)
 step_cnt = 0
 
+# LR scheduler: warmup + cosine annealing
+def get_combined_scheduler(optimizer, base_lr, total_epochs, warmup_epochs, eta_min=0.0001):
+    def lr_lambda(current_epoch):
+        if current_epoch < warmup_epochs:
+            # Linear warmup: da 0 a 1
+            return current_epoch / warmup_epochs
+        else:
+            # Cosine decay: da 1 a eta_min/base_lr
+            progress = (current_epoch - warmup_epochs) / (total_epochs - warmup_epochs)
+            cosine_decay = 0.5 * (1 + math.cos(math.pi * progress))
+            scaled = cosine_decay * (1 - eta_min / base_lr) + eta_min / base_lr
+            return scaled
+
+    return LambdaLR(optimizer, lr_lambda)
+
+
 def train_fn(disc, gen, loader, opt_disc, opt_gen, loss, lr_schedulers, tb_writer):
     global step_cnt
     loop = tqdm(loader, leave=True)
@@ -48,16 +65,16 @@ def train_fn(disc, gen, loader, opt_disc, opt_gen, loss, lr_schedulers, tb_write
         # Train the discriminator
         opt_disc.zero_grad()
         y_fake = gen(x)
-        D_real = disc(x, y)
-        D_real_loss = loss[0](D_real, torch.ones_like(D_real)) # 1 = "real"
-        D_fake = disc(x, y_fake.detach())
-        D_fake_loss = loss[0](D_fake, torch.zeros_like(D_fake)) # 0 = "fake"
-        D_loss = (D_real_loss + D_fake_loss) / 2
-        D_loss_epoch += D_loss.item()
 
         if idx % par["N_CRITICS"] == 0: # update discriminator every n_critics iterations
+            D_real = disc(x, y)
+            D_real_loss = loss[0](D_real, torch.ones_like(D_real)) # 1 = "real"
+            D_fake = disc(x, y_fake.detach())
+            D_fake_loss = loss[0](D_fake, torch.zeros_like(D_fake)) # 0 = "fake"
+            D_loss = (D_real_loss + D_fake_loss) / 2
+            D_loss_epoch += D_loss.item()
             D_loss.backward()
-        opt_disc.step()
+            opt_disc.step()
 
         # Train the generator
         opt_gen.zero_grad()
@@ -116,19 +133,25 @@ def main(data):
 
     # define network models
     disc = Discriminator(in_channels=1, k_size=par["D_KERNEL_SIZE"]).to(par["DEVICE"])
-    gen = Generator(in_channels=1, features=par["G_FEATURES"]).to(par["DEVICE"])
+    gen = DSCNN_Generator(in_channels=1, features=par["G_FEATURES"]).to(par["DEVICE"])
 
     # define optimizers
     opt_disc = optim.Adam(disc.parameters(), lr=par["D_LEARNING_RATE"], betas=(0.9, 0.999))
     opt_gen = optim.Adam(gen.parameters(), lr=par["G_LEARNING_RATE"], betas=(0.9, 0.999))
 
-    # learning rate schedulers
-    opt_disc_scheduler = CosineAnnealingLR(opt_disc,
-                                           T_max = par["NUM_EPOCHS"], # Maximum number of iterations.
-                                           eta_min = 0.0001) # Minimum learning rate.
-    opt_gen_scheduler = CosineAnnealingLR(opt_gen,
-                                          T_max = par["NUM_EPOCHS"], # Maximum number of iterations.
-                                          eta_min = 0.0001) # Minimum learning rate.
+    # New learning rate schedulers, with warmup
+    opt_disc_scheduler = get_combined_scheduler(opt_disc,
+                                                base_lr=par["D_LEARNING_RATE"],
+                                                total_epochs=par["NUM_EPOCHS"],
+                                                warmup_epochs=15,
+                                                eta_min=0.00005)
+
+    opt_gen_scheduler = get_combined_scheduler(opt_gen,
+                                                base_lr=par["G_LEARNING_RATE"],
+                                                total_epochs=par["NUM_EPOCHS"],
+                                                warmup_epochs=10,
+                                                eta_min=0.00005)
+
 
     # list of available loss fn
     adv_loss = nn.MSELoss()                 # LSGAN -> MSELoss
@@ -147,22 +170,22 @@ def main(data):
         f_list = file_parse(par["MEDLEY_SOLOS_PATH"], ext='wav', return_fullpath=True)
         f_list.extend(file_parse(par["GOOD_SOUNDS_PATH"], ext='wav', return_fullpath=True))
         f_list.extend(file_parse(par["SYNTH_SOUNDS_PATH"], substr = 'segmented', ext='wav', return_fullpath=True))
-    train_dataset = Music_dataset_raw(f_list,
-                                      par,
-                                      mode='train',
-                                      device = par['DEVICE'])
+    train_dataset = TF_dataset(f_list,
+                               par,
+                               mode='train',
+                               device = par['DEVICE'])
     
     train_loader = DataLoader(train_dataset,
                               batch_size=par["BATCH_SIZE"],
                               shuffle=True,
                               num_workers=par["NUM_WORKERS"])
     
-    val_dataset = Music_dataset_raw(f_list,
-                                    par,
-                                    mode='val',
-                                    device = par['DEVICE'])
+    val_dataset = TF_dataset(f_list,
+                             par,
+                             mode='val',
+                             device = par['DEVICE'])
 
-    ex_data = val_dataset[10]  # pick a sample for plot
+    ex_data = val_dataset[20]  # pick a sample for plot
 
     print(f'Start training experiment {par["EXPERIMENT_ID"]}')
     start_tstamp = datetime.now()
@@ -194,11 +217,10 @@ def main(data):
             # do not save discriminator                                                                                                                                                                         
             # save_checkpoint(disc, opt_disc, filepath = os.path.join(par["LOG_PATH"], par["EXPERIMENT_ID"], par["MODEL_CHKPT_DIR"], 'chkpt_disc_e_' + str(epoch) + '.pth'))
 
-        # save last epock checkpoint (overwrite)
+        # always save the last epoch checkpoint (overwrite)
         save_checkpoint(gen, opt_gen, filepath = os.path.join(par["LOG_PATH"], par["EXPERIMENT_ID"], par["MODEL_CHKPT_DIR"], 'chkpt_gen_LAST.pth'))
 
         if epoch+1 in par["SAVE_IMG_AT"]:
-            
             save_gen_specs(gen, ex_data, epoch, par)
 
     writer.close()
@@ -208,4 +230,7 @@ def main(data):
 
 
 if __name__ == "__main__":
+    """
+    run $python train_b2b_LPC.py "all"
+    """
     main(data)

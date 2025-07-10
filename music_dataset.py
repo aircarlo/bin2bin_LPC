@@ -6,12 +6,12 @@ import torchaudio
 import torchaudio.transforms as T
 import torchaudio.functional as F
 import librosa
-from lpc import My_LPC_model
+from lpc import LPC_model_fast
 
 
-class Music_dataset_raw(Dataset):
+class TF_dataset(Dataset):
     """
-    Dataset class for raw spectrograms (complex valued).
+    Dataset class for amplitude spectrograms (abs/pha).
     """
 
     def __init__(self, wav_list, params, mode, device):
@@ -27,7 +27,7 @@ class Music_dataset_raw(Dataset):
                                          normalized=False) # .to(self.device)
 
         # LPC class
-        self.lp_model = My_LPC_model(p=self.par["LPC_ORD"], taper=False)
+        self.lp_model = LPC_model_fast(p=self.par["LPC_ORD"], taper=False)
 
 
     def __len__(self):
@@ -37,7 +37,7 @@ class Music_dataset_raw(Dataset):
         # load the clean waveform @ 44100, mono (Librosa)
         clean_waveform, orig_sr = librosa.load(self.wav_list[idx], sr=self.par["WORKING_SR"], mono=True)
 
-        # trim to n*GAP_SIZE
+        # trim to a multiple of GAP_SIZE
         len_samples = clean_waveform.shape[0]        
         clean_waveform = clean_waveform[0:(len_samples // self.par["GAP_SIZE"] * self.par["GAP_SIZE"])]
 
@@ -51,7 +51,9 @@ class Music_dataset_raw(Dataset):
         
         t_clean_frame = clean_waveform[start_bin:end_bin]
         # LPC prediction
-        pred = self.lp_model.predict(ctxt=t_clean_frame[:-2*self.par["GAP_SIZE"]], samp=2*self.par["GAP_SIZE"])
+        # tramite LPC predice gli ultimi 2*GAP_size campioni, basandosi sui primi CONTEXT di clean_frame,
+        # poi sovrascrive i campioni predetti nella sequenza lossy_frame
+        pred = self.lp_model.predict(ctxt=t_clean_frame[:-2*self.par["GAP_SIZE"]], samp=2*self.par["GAP_SIZE"]) # pred = [512]
         t_lossy_frame = np.concatenate((lossy_waveform[start_bin:end_bin-2*self.par["GAP_SIZE"]], pred))
 
         # compute the spectrograms
@@ -71,7 +73,32 @@ class Music_dataset_raw(Dataset):
         return S_lossy_frame_ABS, S_clean_frame_ABS, S_lossy_frame_PHA, torch.from_numpy(t_clean_frame).unsqueeze(0).float()
 
 
+class WF_dataset(Dataset):
+    """
+    Dataset class for waveforms (unused)
+    """
 
+    def __init__(self, wav_list, params, device):
+        self.wav_list = wav_list # full path list
+        self.par = params
+        self.device = device
 
-if __name__ == "__main__":
-    pass
+    def __len__(self):
+        return len(self.wav_list)
+
+    def __getitem__(self, idx):
+        # load the clean waveform @ 44100, mono (Librosa)
+        clean_waveform, orig_sr = librosa.load(self.wav_list[idx], sr=self.par["WORKING_SR"], mono=True)
+
+        # trim to a multiple of GAP_SIZE
+        len_samples = clean_waveform.shape[0]        
+        clean_waveform = clean_waveform[0:(len_samples // self.par["GAP_SIZE"] * self.par["GAP_SIZE"])]
+
+        t0 = np.random.randint(0, clean_waveform.shape[0] - self.par["CONTEXT"] - self.par["GAP_SIZE"])
+        t1 = t0 + self.par["CONTEXT"] - self.par["GAP_SIZE"]
+        t2 = t0 + self.par["CONTEXT"] + self.par["GAP_SIZE"]
+        
+        t_clean_frame = clean_waveform[t0:t1]
+        t_target_frame = clean_waveform[t1:t2]
+
+        return t_clean_frame, t_target_frame

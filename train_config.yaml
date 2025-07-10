@@ -1,15 +1,15 @@
-NOTE: ''
-EXPERIMENT_ID: "999"
-MEDLEY_SOLOS_PATH: "/raid/users/caironi/Is2_PLC_challenge/DATA/MEDLEY_SOLOS_DB"
-GOOD_SOUNDS_PATH: "/raid/users/caironi/Is2_PLC_challenge/DATA/good-sounds"
-SYNTH_SOUNDS_PATH: "/raid/users/caironi/Is2_PLC_challenge/DATA/wav_synth"
-LOG_PATH: "/raid/users/caironi/Is2_PLC_challenge/bin2bin_final/logs"
+NOTE: 'Using DSCNN_Generator_lite, G_FEATURES = 16'
+EXPERIMENT_ID: "001"
+MEDLEY_SOLOS_PATH: "/mnt/sda1/home/caironi/DATA/MEDLEY_SOLOS_DB/"
+GOOD_SOUNDS_PATH: "/mnt/sda1/home/caironi/DATA/good_sounds/"
+SYNTH_SOUNDS_PATH: "/mnt/sda1/home/caironi/DATA/synth_sounds/"
+LOG_PATH: "/mnt/sda1/home/caironi/IS2_PLC_2025/logs"
 IMG_EVAL_DIR: "evaluation"
 MODEL_CHKPT_DIR: "checkpoints"
 G_LEARNING_RATE: 0.0002
 D_LEARNING_RATE: 0.0002
 D_KERNEL_SIZE: [8,2]
-G_FEATURES: 64            # lite = 16, full = 64
+G_FEATURES: 16
 BATCH_SIZE: 16
 NUM_WORKERS: 4
 WORKING_SR: 44100         # working sr
@@ -17,11 +17,11 @@ GAP_SIZE: 512             # gap size as in the challenge regulations (512 = 11.6
 CONTEXT: 4090             
 FFT_SIZE: 511
 FFT_HOP: 16
-LPC_ORD: 128
-N_CRITICS: 10
-LAMBDA: 10
-NUM_EPOCHS: 25
-SAVE_MODEL_AT: []
+LPC_ORD: 256
+N_CRITICS: 100
+LAMBDA: 100
+NUM_EPOCHS: 100
+SAVE_MODEL_AT: [10,20,30,40,50,60,70,80,90,100]
 SAVE_IMG_AT: 'all'
 # load pre-trained model + optimizers, to resume training
 WARM_START: False

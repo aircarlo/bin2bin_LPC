@@ -19,7 +19,8 @@ class CNNBlock(nn.Module):
 
 class PatchDiscriminator(nn.Module):
     """
-    PatchGAN discriminator, as described in Pix2Pix paper
+    PatchGAN discriminator, as described in Pix2Pix paper.
+    For inpainting lossy spectrograms k_size should have an aspect ratio *frequency > time*, e.g. (8,2)
     """
     def __init__(self, in_channels=1, k_size=(4,4), features=[64, 128, 256, 512]):
         super().__init__()
