@@ -1,4 +1,4 @@
-# Enhancing Packet Loss Concealment with Generative Spectrogram Inpainting
+# Restoring Music Integrity via Predictive Modeling and Spectral Inpainting
 
 This repository holds the project files of the _bin2bin_ model for generative inpainting, submitted to the second [IEEE-IS² Music Packet Loss Concealment Challenge](https://internetofsounds2025.ieee-is2.org/workshops/3rd-ieee-international-workshop-networked-immersive-audio/music-packet-loss-concealment).
 
