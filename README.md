@@ -1,6 +1,6 @@
 # Enhancing Packet Loss Concealment with Generative Spectrogram Inpainting
 
-This repository holds the project files of the _bin2bin_ model for generative inpainting, submitted to the [IEEE-IS² Music Packet Loss Concealment Challenge](https://internetofsounds2025.ieee-is2.org/workshops/3rd-ieee-international-workshop-networked-immersive-audio/music-packet-loss-concealment).
+This repository holds the project files of the _bin2bin_ model for generative inpainting, submitted to the second [IEEE-IS² Music Packet Loss Concealment Challenge](https://internetofsounds2025.ieee-is2.org/workshops/3rd-ieee-international-workshop-networked-immersive-audio/music-packet-loss-concealment).
 
 Below are links to the datasets:
 * [Medley Solos DB](https://zenodo.org/records/3464194)
@@ -14,4 +14,4 @@ To start generate inpainted files, set the appropriate paths in `fw_config.yaml`
 
 A pretrained Generator checkpoint is available [here](https://mega.nz/file/XdYgWLoS#q9rfU4ZsTp5QfnpRuWyVdBfBAQMLXkMc0hpehZt_MJU);
 
-For further informations, please contact me at c.aironi@staff.univpm.it
+For further informations, please contact c.aironi@staff.univpm.it
