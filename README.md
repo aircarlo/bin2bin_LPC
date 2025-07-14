@@ -2,7 +2,7 @@
 
 This repository holds the project files of the _bin2bin_v2_ model for generative inpainting, developed for the second [IEEE-IS² Music Packet Loss Concealment Challenge](https://internetofsounds2025.ieee-is2.org/workshops/3rd-ieee-international-workshop-networked-immersive-audio/music-packet-loss-concealment).
 
-Below are links to the datasets:
+Below are links to the datasets used for training the model:
 * [Medley Solos DB](https://zenodo.org/records/3464194)
 * [GoodSounds](https://www.upf.edu/web/mtg/good-sounds)
   
