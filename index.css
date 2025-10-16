@@ -172,7 +172,8 @@ p {
 .playlist {
     display: flex;
     width: 100%;
-    justify-content: space-around;
+    justify-content: center;   /* centra orizzontalmente i player */
+    gap: 30px;                 /* spazio tra i due player */
     flex-wrap: wrap;
     margin: 10px 40px 0px 0px;
 }
