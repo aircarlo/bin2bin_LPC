@@ -12,7 +12,7 @@
 
 body {
     /*background-color: rgb(245, 250, 245);*/
-    background-image: url("img/bg.jpg");
+    background-image: url("img/bg.png");
     background-repeat: repeat;
     background-position: top left;
     background-attachment: fixed; /*Impedisce lo scroll dell’immagine*/
