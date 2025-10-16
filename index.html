@@ -15,10 +15,10 @@
 <body>
 
     <div class='section'>
-        <h2 class="italicized_h2">Low-dimensional Audio Inpainting with mixed <br> generative-predictive model</h2>
-	<h4>C. Aironi, L. Gabrielli, S. Squartini (2024)</h4>
+        <h2 class="italicized_h2">Restoring Music Integrity via Predictive Modeling and Spectral Inpainting</h2>
+	<h4>C. Aironi, L. Gabrielli, S. Cornell, S. Squartini (2024)</h4>
 	<br>
-	<p align="justify">We present bin2bin-v2, a hybrid deep learning framework for Packet Loss Concealment (PLC) in Networked Music Performance (NMP). The system combines a Linear Predictive Coding (LPC) stage with a GAN-based spectrogram inpainting network, restoring missing audio segments in real time. When a packet is lost, LPC provides a coarse time-domain estimate, while bin2bin-v2 refines the result in the time–frequency domain, recovering spectral details and improving perceptual continuity. The proposed method was submitted to the 2025 IS2 Music PLC Challenge, where it achieved first place, demonstrating superior quality and efficiency compared to state-of-the-art approaches. The system runs efficiently on standard CPUs and delivers smoother, more natural reconstructions of monophonic and harmonic musical content under realistic network conditions.</p>
+	<p align="justify">We present <em>bin2bin-v2</em>, a hybrid deep learning framework for Packet Loss Concealment (PLC) in Networked Music Performance (NMP). The system combines a Linear Predictive Coding (LPC) stage with a GAN-based spectrogram inpainting network, restoring missing audio segments in real time. When a packet is lost, LPC provides a coarse time-domain estimate, while <em>bin2bin-v2</em> refines the result in the time–frequency domain, recovering spectral details and improving perceptual continuity. The proposed method was submitted to the 2025 IS2 Music PLC Challenge, where it achieved first place, demonstrating superior quality and efficiency compared to state-of-the-art approaches. The system runs efficiently on standard CPUs and delivers smoother, more natural reconstructions of monophonic and harmonic musical content under realistic network conditions.</p>
 <!-- 	<p><a href="https://">paper</a></p> -->
     </div>
 
@@ -29,14 +29,9 @@
 	<div class="image-container">
 	  <img src="IMG/site_img.png" alt="LDAI framework">
 	</div>
-		
-	<p align="justify">In listening to the following examples, keep in mind that generative-based inpainting does not aim to precisely replicate the missing waveform, but rather to offer a replacement that is perceptually "pleasing" to the listener’s ears.</p>
-        <h3>1024 ms gap</h3>
-        
+	
+	<!--<p align="justify">In listening to the following examples, keep in mind that generative-based inpainting does not aim to precisely replicate the missing waveform, but rather to offer a replacement that is perceptually "pleasing" to the listener’s ears.</p> -->        
         <div class='playlist'>
-		    <div class='labeled-audio'><p class='text'>clean (reference)</p>
-                <audio preload='metadata' controls><source src='SAMPLES/waveform81_clean.wav' type='audio/mpeg'></audio>
-            </div>
 		    <div class='labeled-audio'><p class='text'>corrupted</p>
                 <audio preload='metadata' controls><source src='SAMPLES/waveform81_lossy.wav' type='audio/mpeg'></audio>
             </div>
@@ -46,21 +41,15 @@
         </div>
 	<hr>
         <div class='playlist'>
-		<div class='labeled-audio'><p class='text'>clean (reference)</p>
-                	<audio preload='metadata' controls><source src='SAMPLES/waveform84_clean.wav' type='audio/mpeg'></audio>
-            	</div>
-		<div class='labeled-audio'><p class='text'>corrupted</p>
+			<div class='labeled-audio'><p class='text'>corrupted</p>
                 	<audio preload='metadata' controls><source src='SAMPLES/waveform84_lossy.wav' type='audio/mpeg'></audio>
             	</div>
-		<div class='labeled-audio'><p class='text'>restored</p>
+			<div class='labeled-audio'><p class='text'>restored</p>
                 	<audio preload='metadata' controls><source src='SAMPLES/waveform84_restored.wav' type='audio/mpeg'></audio>
             	</div>
         </div>
 	<hr>
         <div class='playlist'>
-		    <div class='labeled-audio'><p class='text'>clean (reference)</p>
-                <audio preload='metadata' controls><source src='SAMPLES/waveform141_clean.wav' type='audio/mpeg'></audio>
-            </div>
 		    <div class='labeled-audio'><p class='text'>corrupted</p>
                 <audio preload='metadata' controls><source src='SAMPLES/waveform141_lossy.wav' type='audio/mpeg'></audio>
             </div>
@@ -70,9 +59,6 @@
         </div>
 	<hr>
         <div class='playlist'>
-		    <div class='labeled-audio'><p class='text'>clean (reference)</p>
-                <audio preload='metadata' controls><source src='SAMPLES/waveform199_clean.wav' type='audio/mpeg'></audio>
-            </div>
 		    <div class='labeled-audio'><p class='text'>corrupted</p>
                 <audio preload='metadata' controls><source src='SAMPLES/waveform199_lossy.wav' type='audio/mpeg'></audio>
             </div>
@@ -82,62 +68,11 @@
         </div>
 	<hr>
         <div class='playlist'>
-		    <div class='labeled-audio'><p class='text'>clean (reference)</p>
-                <audio preload='metadata' controls><source src='SAMPLES/waveform378_clean.wav' type='audio/mpeg'></audio>
-            </div>
 		    <div class='labeled-audio'><p class='text'>corrupted</p>
                 <audio preload='metadata' controls><source src='SAMPLES/waveform378_lossy.wav' type='audio/mpeg'></audio>
             </div>
 		    <div class='labeled-audio'><p class='text'>restored</p>
                 <audio preload='metadata' controls><source src='SAMPLES/waveform378_restored.wav' type='audio/mpeg'></audio>
-            </div>
-        </div>
-	<hr>
-        <div class='playlist'>
-		    <div class='labeled-audio'><p class='text'>clean (reference)</p>
-                <audio preload='metadata' controls><source src='SAMPLES/waveform506_clean.wav' type='audio/mpeg'></audio>
-            </div>
-		    <div class='labeled-audio'><p class='text'>corrupted</p>
-                <audio preload='metadata' controls><source src='SAMPLES/waveform506_lossy.wav' type='audio/mpeg'></audio>
-            </div>
-		    <div class='labeled-audio'><p class='text'>restored</p>
-                <audio preload='metadata' controls><source src='SAMPLES/waveform506_restored.wav' type='audio/mpeg'></audio>
-            </div>
-        </div>
-	<hr>
-        <div class='playlist'>
-		    <div class='labeled-audio'><p class='text'>clean (reference)</p>
-                <audio preload='metadata' controls><source src='SAMPLES/waveform583_clean.wav' type='audio/mpeg'></audio>
-            </div>
-		    <div class='labeled-audio'><p class='text'>corrupted</p>
-                <audio preload='metadata' controls><source src='SAMPLES/waveform583_lossy.wav' type='audio/mpeg'></audio>
-            </div>
-		    <div class='labeled-audio'><p class='text'>restored</p>
-                <audio preload='metadata' controls><source src='SAMPLES/waveform583_restored.wav' type='audio/mpeg'></audio>
-            </div>
-        </div>
-	<hr>
-        <div class='playlist'>
-		    <div class='labeled-audio'><p class='text'>clean (reference)</p>
-                <audio preload='metadata' controls><source src='SAMPLES/waveform824_clean.wav' type='audio/mpeg'></audio>
-            </div>
-		    <div class='labeled-audio'><p class='text'>corrupted</p>
-                <audio preload='metadata' controls><source src='SAMPLES/waveform824_lossy.wav' type='audio/mpeg'></audio>
-            </div>
-		    <div class='labeled-audio'><p class='text'>restored</p>
-                <audio preload='metadata' controls><source src='SAMPLES/waveform824_restored.wav' type='audio/mpeg'></audio>
-            </div>
-        </div>
-	<hr>
-        <div class='playlist'>
-		    <div class='labeled-audio'><p class='text'>clean (reference)</p>
-                <audio preload='metadata' controls><source src='SAMPLES/waveform999_clean.wav' type='audio/mpeg'></audio>
-            </div>
-		    <div class='labeled-audio'><p class='text'>corrupted</p>
-                <audio preload='metadata' controls><source src='SAMPLES/waveform999_lossy.wav' type='audio/mpeg'></audio>
-            </div>
-		    <div class='labeled-audio'><p class='text'>restored</p>
-                <audio preload='metadata' controls><source src='SAMPLES/waveform999_restored.wav' type='audio/mpeg'></audio>
             </div>
         </div>
 		
