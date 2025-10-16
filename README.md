@@ -14,4 +14,6 @@ To start generate inpainted files, set the appropriate paths in `fw_config.yaml`
 
 A pretrained Generator checkpoint is available [here](https://mega.nz/file/XdYgWLoS#q9rfU4ZsTp5QfnpRuWyVdBfBAQMLXkMc0hpehZt_MJU);
 
+:musical_note: Listen to some examples of repaired music sequences [here](https://aircarlo.github.io/bin2bin_LPC/) :musical_note:
+
 For further informations, please contact c.aironi@staff.univpm.it
