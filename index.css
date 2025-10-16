@@ -11,8 +11,11 @@
 }
 
 body {
-    /*background-color: rgb(253, 253, 254);*/
-    background-color: rgb(245, 250, 245);
+    /*background-color: rgb(245, 250, 245);*/
+    background-image: url("img/bg.jpg");
+    background-repeat: repeat;
+    background-position: top left;
+    background-attachment: fixed; /*Impedisce lo scroll dell’immagine*/
     margin: 50px 0px;
     min-width: 300px;
 }
